@@ -24,6 +24,17 @@ Pin a dated tag (e.g. `claude-code-20261109`) for reproducibility.
 
 Built for `linux/amd64` and `linux/arm64` on every push to `main` and weekly.
 
+## Building locally
+
+Build the image, export it, load it into `sbx`, and run it:
+
+```console
+docker build -t my-template:v1 .
+docker image save my-template:v1 -o my-template.tar
+sbx template load my-template.tar
+sbx run -t my-template:v1 claude
+```
+
 ## Adding an agent
 
 Add it to the `matrix.agent` list in `.github/workflows/build.yml`. The value must match a
@@ -33,6 +44,20 @@ tag of `docker/sandbox-templates`.
 
 The image contains no secrets. Store tokens on the host with `sbx secret`; the
 sandbox proxy injects them into outgoing requests.
+
+### GitLab token (glab)
+
+Set the token globally on the host. The sandbox only sees a placeholder; the proxy
+substitutes the real value for requests to `gitlab.com`:
+
+```console
+sbx secret set-custom -g \
+  --host gitlab.com \
+  --env GITLAB_TOKEN \
+  --value <your-token>
+```
+
+Never run `glab auth login` inside the sandbox.
 
 ## Updating tool versions
 
