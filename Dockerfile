@@ -9,6 +9,8 @@ FROM docker/sandbox-templates:${AGENT}
 ARG SANDBOX_USER=agent
 ARG MAVEN_VERSION=3.9.9
 ARG GLAB_VERSION=1.53.0
+# Full "ansible" package: ansible-core plus the community collection bundle.
+ARG ANSIBLE_VERSION=14.6.0
 # Set automatically by buildx (amd64 / arm64)
 ARG TARGETARCH
 
@@ -30,7 +32,7 @@ RUN install -d -m 0755 /etc/apt/keyrings \
       > /etc/apt/sources.list.d/adoptium.list \
  && apt-get update && apt-get install -y --no-install-recommends \
       temurin-17-jdk temurin-21-jdk temurin-25-jdk \
- && rm -rf /var/lib/apt/lists/* \
+ && rm -rf /var/lib/apt/lists/* /usr/lib/jvm/temurin-*/lib/src.zip \
  && for v in 17 21 25; do ln -s "$(ls -d /usr/lib/jvm/temurin-$v-jdk-*)" /opt/jdk-$v; done
 
 # --- Maven (tarball, so apt doesn't pull in an extra default JDK) -----------
@@ -49,6 +51,11 @@ RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y --no-modify-path \
 RUN curl -fsSL -o /tmp/glab.deb \
       "https://gitlab.com/gitlab-org/cli/-/releases/v${GLAB_VERSION}/downloads/glab_${GLAB_VERSION}_linux_${TARGETARCH}.deb" \
  && dpkg -i /tmp/glab.deb && rm /tmp/glab.deb
+
+# --- Ansible (own venv, so it doesn't touch system Python / PEP 668) ---------
+RUN python3 -m venv /opt/ansible \
+ && /opt/ansible/bin/pip install --no-cache-dir "ansible==${ANSIBLE_VERSION}" \
+ && ln -s /opt/ansible/bin/ansible* /usr/local/bin/
 
 ENV JAVA_HOME=/opt/jdk-25 \
     MAVEN_HOME=/opt/maven \

@@ -8,6 +8,7 @@ The following tools are preinstalled. Prefer them over installing anything new.
 - Switch per command: `JAVA_HOME=/opt/jdk-17 ./gradlew build`
 - Gradle detects all three automatically (they live in /usr/lib/jvm).
 - Maven: `mvn` on PATH. Prefer a project's `./mvnw` / `./gradlew` wrapper if present.
+- JDK source archives (src.zip) are not included.
 - Do not download or install other JDKs. If a project needs a version
   that isn't listed, stop and ask.
 
@@ -15,6 +16,12 @@ The following tools are preinstalled. Prefer them over installing anything new.
 - Rust: rustup, cargo, clippy, rustfmt
 - Python 3 with pip and venv. Create a venv per project; don't install globally.
 - Build essentials: gcc, make, pkg-config, OpenSSL headers
+- Ansible (full package, ansible-core 2.21) on PATH: `ansible`, `ansible-playbook`, `ansible-galaxy`, ...
+  It lives in its own venv at /opt/ansible; don't pip-install into it.
+  The standard community collection bundle is preinstalled (community.general,
+  ansible.posix, community.docker, kubernetes.core, amazon.aws, ...); check with
+  `ansible-galaxy collection list`. Install anything else into the project, e.g.
+  `ansible-galaxy collection install -r requirements.yml -p ./collections`.
 
 ## GitLab
 - `glab` is installed. Authentication is handled by a proxy outside the sandbox.

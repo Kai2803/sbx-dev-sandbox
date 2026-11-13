@@ -3,7 +3,8 @@
 Prebuilt [Docker Sandbox](https://docs.docker.com/ai/sandboxes/) templates with common
 toolchains, so every project works without per-project setup.
 
-**Included:** JDK 17 / 21 / 25 (Temurin), Maven, Rust, Python 3, build essentials, glab.
+**Included:** JDK 17 / 21 / 25 (Temurin), Maven, Rust, Python 3, build essentials, glab,
+Ansible (full package incl. community collections).
 See [`context/sandbox-environment.md`](context/sandbox-environment.md). It is copied into
 the image so the agent knows what's available.
 
@@ -61,5 +62,6 @@ Never run `glab auth login` inside the sandbox.
 
 ## Updating tool versions
 
-Bump `MAVEN_VERSION` / `GLAB_VERSION` in the `Dockerfile`. When you add or remove a tool,
+Bump `MAVEN_VERSION` / `GLAB_VERSION` / `ANSIBLE_VERSION`
+in the `Dockerfile`. When you add or remove a tool,
 update `context/sandbox-environment.md` in the same commit.
