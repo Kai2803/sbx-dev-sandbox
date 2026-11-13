@@ -60,6 +60,13 @@ sbx secret set-custom -g \
 
 Never run `glab auth login` inside the sandbox.
 
+## Claude Code settings
+
+`config/claude-managed-settings.json` is installed as
+`/etc/claude-code/managed-settings.json`. It takes precedence over any settings inside
+the sandbox. It currently turns off the Co-Authored-By trailer, the PR footer and
+the session link in commits and PRs.
+
 ## Updating tool versions
 
 Bump `MAVEN_VERSION` / `GLAB_VERSION` / `ANSIBLE_VERSION`

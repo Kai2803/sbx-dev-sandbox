@@ -65,6 +65,8 @@ ENV JAVA_HOME=/opt/jdk-25 \
 # Claude Code loads /etc/claude-code/CLAUDE.md for every session;
 # Codex reads ~/.codex/AGENTS.md.
 COPY context/sandbox-environment.md /etc/claude-code/CLAUDE.md
+# Machine-wide Claude Code settings (highest precedence, e.g. no commit/PR attribution)
+COPY config/claude-managed-settings.json /etc/claude-code/managed-settings.json
 COPY --chown=${SANDBOX_USER}: context/sandbox-environment.md /home/${SANDBOX_USER}/.codex/AGENTS.md
 
 USER ${SANDBOX_USER}
